@@ -1,0 +1,77 @@
+-----------------------------------------------------
+TEST CASE 1: Kërko ditë pushimi të mbetura
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=A kam ditë pushimi të papërdorura?
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 2: Kërko ditë pushimi të mbetura (me userId)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=A kam ditë pushimi të papërdorura? ID-ja ime është 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 3: Bëj kërkesë për leje (të gjitha të dhënat)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Dua të marr leje nga 2024-07-10 deri më 2024-07-12 për arsye pushimi. ID-ja ime është 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 4: Bëj kërkesë për leje (pa toDate)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Dua të marr leje nga 2024-07-10 për arsye pushimi. ID-ja ime është 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 5: Bëj kërkesë për leje (pa userId)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Dua të marr leje nga 2024-07-10 deri më 2024-07-12 për arsye pushimi.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 6: Shiko statusin e kërkesave për leje
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Çfarë statusi kanë kërkesat e mia për leje? ID-ja ime është 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 7: Bëj kërkesë për cash advance (të gjitha të dhënat)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Kërkoj cash advance 6000 euro për Gjermani, Berlin, menaxher 123, userId 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 8: Bëj kërkesë për cash advance (pa disa fusha)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Kërkoj cash advance për Gjermani.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 9: Shiko statusin e shpenzimeve
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Statusi i shpenzimeve të mia, userId 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 10: Testo gabime (userId bosh)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Dua të marr leje nga 2024-07-10 deri më 2024-07-12 për arsye pushimi. (pa userId)
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 11: Testo gabime (fromDate > toDate)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Dua të marr leje nga 2024-07-20 deri më 2024-07-10 për arsye pushimi. ID-ja ime është 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 12: Testo cash advance me shumë të vogël (<100)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Kërkoj cash advance 50 euro për Gjermani, Berlin, menaxher 123, userId 101.
+-----------------------------------------------------
+
+-----------------------------------------------------
+TEST CASE 13: Testo cash advance me shumë të madhe (>5000)
+-----------------------------------------------------
+GET http://localhost:8080/ai?message=Kërkoj cash advance 9000 euro për Gjermani, Berlin, menaxher 123, userId 101.
+-----------------------------------------------------

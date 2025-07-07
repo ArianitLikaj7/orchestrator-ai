@@ -39,15 +39,17 @@ public class HrFinanceTools {
     }
 
     @Tool(description = """
-            Request leave for a user.
-            Required fields: userId, fromDate (YYYY-MM-DD), toDate (YYYY-MM-DD), reason.
-            When all values are provided, always confirm with user before submitting the request.
-            Show the summary of extracted information (start date, end date, reason, userId) and ask: "Do you want to proceed?".
-            Submit to backend only after user confirmation (yes).
-            """)
+        Request leave for a user.
+        Required fields: userId, fromDate (YYYY-MM-DD), toDate (YYYY-MM-DD), reason.
+        If any of these fields are missing, inform the user exactly which field(s) are missing and do not proceed with the request.
+        When all required values are provided, always confirm with the user before submitting the request.
+        Show a summary of the extracted information (start date, end date, reason, userId) and ask: "Do you want to proceed?".
+        Only proceed if user confirms with yes.
+        """)
     public ApiResponse requestLeave(@Valid LeaveRequestDto dto) {
         return hrService.requestLeave(dto);
     }
+
 
     @Tool(description = "Get leave request status for a user by userId.")
     public List<ApiResponse> getLeaveStatus(String userId) {
@@ -57,6 +59,7 @@ public class HrFinanceTools {
     @Tool(description = """
             Request a cash advance for a user.
             Required fields: userId, destinationCountry, city, managerId, amount.
+            If any of these fields are missing, inform the user exactly which field(s) are missing and do not proceed with the request.
             When all fields are collected, confirm with user before proceeding.
             Show user the values and ask: "Do you want to continue?"
             Only proceed if user confirms with yes.

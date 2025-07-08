@@ -2,6 +2,8 @@ package dev.arianit.orchestrartor.orchestrator.controller;
 
 import dev.arianit.orchestrartor.orchestrator.service.HrFinanceTools;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.util.MimeTypeUtils;
@@ -17,8 +19,12 @@ public class HrFinanceAiController {
     private final ChatClient chatClient;
     private final HrFinanceTools hrFinanceTools;
 
-    public HrFinanceAiController(ChatClient.Builder builder, HrFinanceTools hrFinanceTools) {
-        this.chatClient = builder.build();
+    public HrFinanceAiController(ChatClient.Builder builder,
+                                 HrFinanceTools hrFinanceTools,
+                                 ChatMemory chatMemory) {
+        this.chatClient = builder
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
         this.hrFinanceTools = hrFinanceTools;
     }
 

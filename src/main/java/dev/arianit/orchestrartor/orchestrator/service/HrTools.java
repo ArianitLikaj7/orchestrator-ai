@@ -1,8 +1,6 @@
 package dev.arianit.orchestrartor.orchestrator.service;
 
 import dev.arianit.orchestrartor.dto.ApiResponse;
-import dev.arianit.orchestrartor.dto.CashAdvanceDto;
-import dev.arianit.orchestrartor.dto.LeaveRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.annotation.Tool;
@@ -14,46 +12,42 @@ import org.springframework.util.MimeTypeUtils;
 import java.util.List;
 
 @Component
-public class HrFinanceTools {
-
-    private final HRService hrService;
-    private final FinanceService financeService;
+public class HrTools {
     private final ChatClient chatClient;
 
     @Value("classpath:/images/test.jpg")
     private Resource sampleImage;
 
-    public HrFinanceTools(
-            HRService hrService,
-            FinanceService financeService,
+    public HrTools(
             ChatClient.Builder chatClient
     ) {
-        this.hrService = hrService;
-        this.financeService = financeService;
         this.chatClient = chatClient.build();
     }
 
     @Tool(description = "Get available vacation days for a user by userId.")
     public ApiResponse getVacationDays(String userId) {
-        return hrService.getVacationDays(userId);
+        return null;
+        //TODO
     }
 
     @Tool(description = """
-        Request leave for a user.
-        Required fields: userId, fromDate (YYYY-MM-DD), toDate (YYYY-MM-DD), reason.
-        If any of these fields are missing, inform the user exactly which field(s) are missing and do not proceed with the request.
-        When all required values are provided, always confirm with the user before submitting the request.
-        Show a summary of the extracted information (start date, end date, reason, userId) and ask: "Do you want to proceed?".
-        Only proceed if user confirms with yes.
-        """)
-    public ApiResponse requestLeave(@Valid LeaveRequestDto dto) {
-        return hrService.requestLeave(dto);
+            Request leave for a user.
+            Required fields: userId, fromDate (YYYY-MM-DD), toDate (YYYY-MM-DD), reason.
+            If any of these fields are missing, inform the user exactly which field(s) are missing and do not proceed with the request.
+            When all required values are provided, always confirm with the user before submitting the request.
+            Show a summary of the extracted information (start date, end date, reason, userId) and ask: "Do you want to proceed?".
+            Only proceed if user confirms with yes.
+            """)
+    public ApiResponse requestLeave() {
+        return null;
+        //TODO
     }
 
 
     @Tool(description = "Get leave request status for a user by userId.")
     public List<ApiResponse> getLeaveStatus(String userId) {
-        return hrService.getLeaveStatus(userId);
+        return null;
+        //TODO
     }
 
     @Tool(description = """
@@ -64,13 +58,15 @@ public class HrFinanceTools {
             Show user the values and ask: "Do you want to continue?"
             Only proceed if user confirms with yes.
             """)
-    public ApiResponse requestCashAdvance(@Valid CashAdvanceDto dto) {
-        return financeService.cashAdvance(dto);
+    public ApiResponse requestCashAdvance() {
+        return null;
+        //TODO
     }
 
     @Tool(description = "Get expense status for a user by userId.")
     public List<ApiResponse> getExpenseStatus(String userId) {
-        return financeService.getExpenseStatus(userId);
+        return null;
+        //TODO
     }
 
     @Tool(description = """

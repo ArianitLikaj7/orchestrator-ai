@@ -25,7 +25,7 @@ public class HrAiController {
         this.hrTools = hrTools;
     }
 
-    @GetMapping("/ai")
+    @GetMapping("/hr/ask")
     public Flux<String> askAi(@RequestParam String message) {
         return chatClient.prompt()
                 .tools(hrTools)

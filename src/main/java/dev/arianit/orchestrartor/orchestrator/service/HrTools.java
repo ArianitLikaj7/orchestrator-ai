@@ -1,91 +1,99 @@
 package dev.arianit.orchestrartor.orchestrator.service;
 
+import dev.arianit.orchestrartor.client.impl.HrServiceImpl;
 import dev.arianit.orchestrartor.dto.ApiResponse;
-import jakarta.validation.Valid;
+import dev.arianit.orchestrartor.dto.hr.dto.CreateLeaveRequestDto;
+import dev.arianit.orchestrartor.dto.hr.enumeration.LeaveStatus;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.annotation.Tool;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MimeTypeUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
 public class HrTools {
+
     private final ChatClient chatClient;
+    private final HrServiceImpl hrService;
 
-    @Value("classpath:/images/test.jpg")
-    private Resource sampleImage;
-
-    public HrTools(
-            ChatClient.Builder chatClient
-    ) {
+    public HrTools(ChatClient.Builder chatClient, HrServiceImpl hrService) {
         this.chatClient = chatClient.build();
-    }
-
-    @Tool(description = "Get available vacation days for a user by userId.")
-    public ApiResponse getVacationDays(String userId) {
-        return null;
-        //TODO
+        this.hrService = hrService;
     }
 
     @Tool(description = """
-            Request leave for a user.
-            Required fields: userId, fromDate (YYYY-MM-DD), toDate (YYYY-MM-DD), reason.
-            If any of these fields are missing, inform the user exactly which field(s) are missing and do not proceed with the request.
-            When all required values are provided, always confirm with the user before submitting the request.
-            Show a summary of the extracted information (start date, end date, reason, userId) and ask: "Do you want to proceed?".
-            Only proceed if user confirms with yes.
-            """)
-    public ApiResponse requestLeave() {
-        return null;
-        //TODO
-    }
+        Retrieve the remaining leave days for an employee.
 
+        Required:
+        - employeeId: The unique identifier of the employee.
 
-    @Tool(description = "Get leave request status for a user by userId.")
-    public List<ApiResponse> getLeaveStatus(String userId) {
-        return null;
-        //TODO
-    }
+        Behavior:
+        - Returns a list of leave types and how many days are remaining for each (e.g., {"VACATION": 5, "SICK": 3}).
+        - If the employeeId is missing or invalid, return an appropriate error message.
 
-    @Tool(description = """
-            Request a cash advance for a user.
-            Required fields: userId, destinationCountry, city, managerId, amount.
-            If any of these fields are missing, inform the user exactly which field(s) are missing and do not proceed with the request.
-            When all fields are collected, confirm with user before proceeding.
-            Show user the values and ask: "Do you want to continue?"
-            Only proceed if user confirms with yes.
-            """)
-    public ApiResponse requestCashAdvance() {
-        return null;
-        //TODO
-    }
-
-    @Tool(description = "Get expense status for a user by userId.")
-    public List<ApiResponse> getExpenseStatus(String userId) {
-        return null;
-        //TODO
+        Output:
+        - A successful ApiResponse with remaining days in JSON format.
+        - If an error occurs, return ApiResponse with status 'ERROR' and the error message.
+    """)
+    public ApiResponse getRemainingDaysByEmployeeId(String employeeId) {
+        try {
+            return hrService.getRemainingDays(employeeId);
+        } catch (Exception e) {
+            return new ApiResponse("Failed to fetch remaining days: " + e.getMessage(), "ERROR");
+        }
     }
 
     @Tool(description = """
-            Extract the total value from the built-in test image (test.jpg) using OCR via AI.
-            Show the detected total to the user and ask for confirmation before saving.
-            """)
-    public ApiResponse extractSampleImageTotal() {
-        String result = chatClient.prompt()
-                .user(u -> {
-                    u.text("Please extract the TOTAL value from this invoice image. Return only the amount.");
-                    u.media(MimeTypeUtils.IMAGE_JPEG, sampleImage);
-                })
-                .call()
-                .content();
+        Submit a leave request for an employee.
 
-        String message = String.format(
-                "Totali i nxjerrë nga test.jpg është: %s",
-                result.trim()
-        );
-        return new ApiResponse(message, "PENDING_CONFIRMATION");
+        Required fields:
+        - employeeId: The employee requesting leave.
+        - type: The type of leave (e.g., VACATION, SICK, UNPAID).
+        - startDate: Start of the leave (format YYYY-MM-DD).
+        - endDate: End of the leave (format YYYY-MM-DD).
+
+        Workflow:
+        - Validate that all required fields are present and correctly formatted.
+        - If any field is missing or invalid, return a message indicating which field(s) are problematic.
+        - When valid, generate a summary: 
+            "Employee {employeeId} is requesting {type} leave from {startDate} to {endDate}."
+        - Ask the user for confirmation: "Do you want to proceed with submitting this leave request?"
+        - Proceed only if user confirms with 'yes'.
+
+        Output:
+        - On success, return the created leave request wrapped in ApiResponse.
+        - On failure, return an ApiResponse with error details and status 'ERROR'.
+    """)
+    public ApiResponse requestLeave(CreateLeaveRequestDto createLeaveRequestDto) {
+        try {
+            return hrService.createLeave(createLeaveRequestDto);
+        } catch (Exception e) {
+            return new ApiResponse("Failed to create leave: " + e.getMessage(), "ERROR");
+        }
+    }
+
+    @Tool(description = """
+        Update the approval status of an existing leave request.
+
+        Required:
+        - leaveId: The ID of the leave request to update.
+        - leaveStatus: The new status (e.g., APPROVED, REJECTED, PENDING).
+
+        Behavior:
+        - Updates the leave request status in the HR system.
+        - Ensure both leaveId and leaveStatus are provided and valid.
+
+        Output:
+        - Returns an ApiResponse indicating success.
+        - On error, return ApiResponse with status 'ERROR' and details of what failed.
+    """)
+    public List<ApiResponse> updateStatusOfLeaveRequest(Integer leaveId, LeaveStatus leaveStatus) {
+        try {
+            ApiResponse response = hrService.updateLeaveStatus(leaveId, leaveStatus);
+            return Collections.singletonList(response);
+        } catch (Exception e) {
+            return List.of(new ApiResponse("Failed to update leave status: " + e.getMessage(), "ERROR"));
+        }
     }
 }

@@ -1,7 +1,5 @@
 package dev.arianit.orchestrartor.client.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.arianit.orchestrartor.client.HrServiceClient;
 import dev.arianit.orchestrartor.dto.ApiResponse;
 import dev.arianit.orchestrartor.dto.hr.dto.CreateLeaveRequestDto;
@@ -18,37 +16,32 @@ import java.util.List;
 public class HrServiceImpl {
 
     private final HrServiceClient hrServiceClient;
-    private final ObjectMapper objectMapper;
 
-    public HrServiceImpl(HrServiceClient hrServiceClient, ObjectMapper objectMapper) {
+    public HrServiceImpl(HrServiceClient hrServiceClient) {
         this.hrServiceClient = hrServiceClient;
-        this.objectMapper = objectMapper;
     }
 
-    public ApiResponse getAllLeaves() throws JsonProcessingException {
+    public ApiResponse<List<LeaveRequest>> getAllLeaves() {
         ResponseEntity<List<LeaveRequest>> response = hrServiceClient.getAllLeaves();
-        String status = ((HttpStatus) response.getStatusCode()).name();
-        String body = objectMapper.writeValueAsString(response.getBody());
-        return new ApiResponse(body, status);
+        String status = response.getStatusCode().toString();
+        return new ApiResponse<>(response.getBody(), status);
     }
 
-    public ApiResponse createLeave(CreateLeaveRequestDto dto) throws JsonProcessingException {
+    public ApiResponse<LeaveRequest> createLeave(CreateLeaveRequestDto dto) {
         ResponseEntity<LeaveRequest> response = hrServiceClient.createLeave(dto);
-        String status = ((HttpStatus) response.getStatusCode()).name();
-        String body = objectMapper.writeValueAsString(response.getBody());
-        return new ApiResponse(body, status);
+        String status = response.getStatusCode().toString();
+        return new ApiResponse<>(response.getBody(), status);
     }
 
-    public ApiResponse updateLeaveStatus(Integer leaveId, LeaveStatus statusEnum) {
+    public ApiResponse<String> updateLeaveStatus(Integer leaveId, LeaveStatus statusEnum) {
         ResponseEntity<String> response = hrServiceClient.updateLeaveStatus(leaveId, statusEnum);
-        String status = ((HttpStatus) response.getStatusCode()).name();
-        return new ApiResponse(response.getBody(), status);
+        String status = response.getStatusCode().toString();
+        return new ApiResponse<>(response.getBody(), status);
     }
 
-    public ApiResponse getRemainingDays(String employeeId) throws JsonProcessingException {
+    public ApiResponse<RemainingDaysDto> getRemainingDays(String employeeId) {
         ResponseEntity<RemainingDaysDto> response = hrServiceClient.getRemainingDays(employeeId);
-        String status = ((HttpStatus) response.getStatusCode()).name();
-        String body = objectMapper.writeValueAsString(response.getBody());
-        return new ApiResponse(body, status);
+        String status = response.getStatusCode().toString();
+        return new ApiResponse<>(response.getBody(), status);
     }
 }

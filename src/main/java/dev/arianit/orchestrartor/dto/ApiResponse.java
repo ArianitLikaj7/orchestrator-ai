@@ -1,16 +1,15 @@
 package dev.arianit.orchestrartor.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ApiResponse {
-    public String message;
-    public String status;
-
-    public ApiResponse(String message, String status) {
-        this.message = message;
-        this.status = status;
-    }
+@AllArgsConstructor
+@NoArgsConstructor
+public class ApiResponse<T> {
+    private T data;
+    private String status;
 }

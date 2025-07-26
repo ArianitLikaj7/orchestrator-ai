@@ -1,4 +1,4 @@
-package dev.arianit.orchestrartor.dto;
+package dev.arianit.orchestrartor.dto.hr.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiResponse<T> {
-    private T data;
-    private String status;
+public class RemainingDaysDto {
+    private int annualLeave;
+    private int sickLeave;
+    private int otherLeave;
 }

@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 @FeignClient(
         name = "hr-service",
-        url = "${hr-service.url}",
+        url = "http://localhost:8081",
         path = "/api/leaves"
 )
 public interface HrServiceClient {
@@ -26,8 +26,8 @@ public interface HrServiceClient {
     ResponseEntity<LeaveRequest> createLeave(@RequestBody CreateLeaveRequestDto dto);
 
     @PutMapping("/{id}/status")
-    ResponseEntity<String> updateLeaveStatus(@PathVariable("id") Integer id, @RequestBody LeaveStatus status);
+    ResponseEntity<String> updateLeaveStatus(@PathVariable("id") Integer id, @RequestBody Map<String, String> body);
 
     @GetMapping("/employee/{employeeId}/remaining")
-    ResponseEntity<RemainingDaysDto> getRemainingDays(@PathVariable("employeeId") String employeeId);
+    ResponseEntity<Map<String, Object>> getRemainingDays(@PathVariable("employeeId") Long employeeId);
 }

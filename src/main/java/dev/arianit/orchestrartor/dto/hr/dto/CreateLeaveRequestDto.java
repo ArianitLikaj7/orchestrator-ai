@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CreateLeaveRequestDto {
     @NotBlank(message = "employeeId is required")
-    private String employeeId;
+    private Long employeeId = 123L;
 
     @NotNull(message = "type is required")
     private LeaveType type;

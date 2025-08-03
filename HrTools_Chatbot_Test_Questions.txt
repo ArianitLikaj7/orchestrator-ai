@@ -1,0 +1,12 @@
+
+1. How many leave days do I have left?
+
+2. I want to request vacation leave from 2025-08-10 to 2025-08-15.
+
+3. I want to take leave from August 35 to September 1.
+
+4. Approve leave request with ID 101.
+
+5. Reject leave request 102.
+
+6. Update leave status for ID abc to APPROVED.

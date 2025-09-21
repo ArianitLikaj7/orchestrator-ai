@@ -1,8 +1,6 @@
-package dev.arianit.orchestrartor.client;
+package dev.arianit.orchestrartor.client.hrservice;
 
 import dev.arianit.orchestrartor.dto.hr.dto.CreateLeaveRequestDto;
-import dev.arianit.orchestrartor.dto.hr.dto.RemainingDaysDto;
-import dev.arianit.orchestrartor.dto.hr.enumeration.LeaveStatus;
 import dev.arianit.orchestrartor.dto.hr.request.LeaveRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;

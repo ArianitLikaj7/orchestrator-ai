@@ -1,6 +1,6 @@
-package dev.arianit.orchestrartor.client.impl;
+package dev.arianit.orchestrartor.client.hrservice.impl;
 
-import dev.arianit.orchestrartor.client.HrServiceClient;
+import dev.arianit.orchestrartor.client.hrservice.HrServiceClient;
 import dev.arianit.orchestrartor.dto.ApiResponse;
 import dev.arianit.orchestrartor.dto.hr.dto.CreateLeaveRequestDto;
 import dev.arianit.orchestrartor.dto.hr.request.LeaveRequest;
